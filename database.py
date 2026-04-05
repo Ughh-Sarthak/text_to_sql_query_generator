@@ -32,16 +32,17 @@ def list_database():
         return {"error": str(e)}
 
 
-def list_tables():
+def list_tables(database_name: str = None):
+    db = database_name if database_name else MYSQL_DATABASE
     try:
         with engine.connect() as connection:
-           
-            results = connection.execute(text(f"SHOW TABLES FROM `{MYSQL_DATABASE}`")).fetchall()
+            results = connection.execute(
+                text(f"SHOW TABLES FROM `{db}`")
+            ).fetchall()
             return {"tables": [row[0] for row in results]}
     except Exception as e:
         print("Error listing tables:", e)
         return {"error": str(e)}
-
 
 def list_columns(table_name: str):  
     try:
